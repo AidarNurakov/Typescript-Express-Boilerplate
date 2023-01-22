@@ -1,7 +1,8 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import Controller from 'interfaces/controller.interface';
+import Controller from './interfaces/controller.interface';
 import mongoose from 'mongoose';
+import errorMiddleware from './middleware/error.middleware';
 
 class App {
     public app: express.Application;
@@ -12,6 +13,7 @@ class App {
         this.connectToTheDatabase();
         this.iniitializeMiddlewares()
         this.iniitializeControllers(controllers)
+        this.initializeErrorHandling();
     }
 
     public listen() {
@@ -22,6 +24,10 @@ class App {
 
     private iniitializeMiddlewares() {
         this.app.use(bodyParser.json())
+    }
+
+    private initializeErrorHandling() {
+        this.app.use(errorMiddleware);
     }
 
     private iniitializeControllers(controllers: Controller[]) {
