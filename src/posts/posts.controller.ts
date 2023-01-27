@@ -64,6 +64,7 @@ class PostsController {
             authorId: request['user']._id
         });
         const savedPost = await createdPost.save();
+        await savedPost.populate('author').execPopulate();
         response.send(savedPost);
     }
 
